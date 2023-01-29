@@ -1,0 +1,17 @@
+# Generated file
+bin
+build_target
+build_test
+test-coverage
+
+# IDE file
+.vscode
+.cproject
+.project
+
+# HAL specific folder
+HAL/STM32_HAL_Driver
+HAL/CMSIS/Device
+
+# OS specific folder
+OS/FreeRTOS
