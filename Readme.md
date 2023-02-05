@@ -8,19 +8,16 @@ This template is customizable and you can easily add your microcontroller.
 ```bash
 mkdir build_target && cd build_target
 cmake .. -GNinja -DCMAKE_BUILD_TYPE=<Debug or Release>
-cmake --build . --target all
-cmake --build . --target clean
+ninja
 ```
 ### Build tests (native compilation)
 ```bash
 mkdir build_test && cd build_test
 cmake .. -GNinja -DCMAKE_BUILD_TYPE=Test
-cmake --build . --target all
-cmake --build . --target clean
+ninja
 ctest
 ctest -N
 ctest -R <Test_Name>
-ctest -T Coverage
 ```
 ### Generate HTMP page for test coverage
 ```bash
@@ -30,14 +27,10 @@ genhtml coverage.info -o generate-html
 ```
 ## Flash after building a firmware
 ```bash
-openocd -f config/openocd.cfg -c "setup stm32l1" -c "program_release bin/<Your board>_<Debug or Release>.elf"
+ninja flash
 ```
 ## Open a debug session
 Open a debug session with openocd :
 ```bash
-openocd -f config/openocd.cfg -c "setup stm32l1"
-```
-And on another terminal, launch gdb with the debug binary :
-``bash
-arm-none-eabi-gdb --tui --eval-command "target remote :3333" --eval-command "monitor reset halt" --eval-command "load" bin/<Your board>_Debug.elf
+ninja debug
 ```

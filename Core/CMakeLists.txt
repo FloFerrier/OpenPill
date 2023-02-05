@@ -54,3 +54,18 @@ target_link_options(${BUILD_TARGET} PRIVATE
     -Wl,--print-memory-usage
     -Wl,--gc-sections
 )
+
+set(TARGET_BIN "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${BUILD_TARGET}.elf" CACHE INTERNAL "")
+
+add_custom_target(flash
+    COMMAND openocd -f ${CMAKE_SOURCE_DIR}/config/openocd.cfg -c "setup stm32l1" -c "program_release ${TARGET_BIN}"
+    DEPENDS /usr/bin/openocd ${TARGET_BIN}
+    VERBATIM
+)
+
+add_custom_target(debug
+    COMMAND openocd -f ${CMAKE_SOURCE_DIR}/config/openocd.cfg -c "setup stm32l1"
+    COMMAND gdb-multiarch --tui --eval-command "target remote :3333" --eval-command "monitor reset halt" --eval-command "load" ${TARGET_BIN}
+    DEPENDS /usr/bin/openocd /usr/bin/gdb-multiarch ${TARGET_BIN}
+    VERBATIM
+)
