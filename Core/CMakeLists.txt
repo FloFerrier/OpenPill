@@ -1,11 +1,14 @@
 set(BUILD_TARGET "${SELECTED_BOARD}_${CMAKE_BUILD_TYPE}" CACHE INTERNAL "")
 
+add_subdirectory(Rn4871/Driver)
+
 add_executable(${BUILD_TARGET}
     Src/main.c
     Src/stm32_it.c
     Src/led.c
     Log/log.c
     Log/Driver/log_driver.c
+    Rn4871/rn4871.c
 )
 
 target_include_directories(${BUILD_TARGET} PRIVATE
@@ -19,6 +22,7 @@ target_include_directories(${BUILD_TARGET} PRIVATE
     Inc
     Log
     Log/Driver
+    Rn4871
 )
 
 target_compile_definitions(${BUILD_TARGET} PRIVATE
@@ -29,7 +33,11 @@ target_compile_definitions(${BUILD_TARGET} PRIVATE
     $<$<CONFIG:Debug>:DEBUG>
 )
 
-target_link_libraries(${BUILD_TARGET} PRIVATE stm32_hal_driver freertos_kernel)
+target_link_libraries(${BUILD_TARGET} PRIVATE
+    stm32_hal_driver
+    freertos_kernel
+    rn4871-driver
+)
 
 target_compile_options(${BUILD_TARGET} PRIVATE
     -mcpu=${CPU}

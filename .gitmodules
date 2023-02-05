@@ -1,0 +1,3 @@
+[submodule "Core/Rn4871/Driver"]
+	path = Core/Rn4871/Driver
+	url = git@github.com:FloFerrier/rn4871-driver.git

@@ -2,6 +2,7 @@
 
 #include "led.h"
 #include "log.h"
+#include "rn4871.h"
 
 void SystemClock_Config(void);
 
@@ -17,8 +18,15 @@ int main(void)
         Error_Handler();
     }
 
+    USER_RN4871_Init();
+
     BaseType_t result = 0;
     result = xTaskCreate (USER_LED_Task, "Task_Led_Blink", 1024, NULL, tskIDLE_PRIORITY + 2, NULL);
+    if(pdPASS != result)
+    {
+        Error_Handler();
+    }
+    result = xTaskCreate (USER_RN4871_Task, "Task_Rn4871", 2048, NULL, tskIDLE_PRIORITY + 2, NULL);
     if(pdPASS != result)
     {
         Error_Handler();
